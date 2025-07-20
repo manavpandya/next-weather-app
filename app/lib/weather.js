@@ -1,18 +1,18 @@
 
-const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_KEY;
-
 export async function getWeather(city) {
-  const res = await fetch(
-    `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`
-  );
-  if (!res.ok) throw new Error("City not found");
+  const res = await fetch(`/api/weather?city=${encodeURIComponent(city)}`);
+  if (!res.ok) {
+    const data = await res.json();
+    throw new Error(data.error || "City not found");
+  }
   return res.json();
 }
 
 export async function getForecast(city) {
-  const res = await fetch(
-    `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${API_KEY}`
-  );
-  if (!res.ok) throw new Error("Forecast not found");
+  const res = await fetch(`/api/forecast?city=${encodeURIComponent(city)}`);
+  if (!res.ok) {
+    const data = await res.json();
+    throw new Error(data.error || "Forecast not found");
+  }
   return res.json();
 }
